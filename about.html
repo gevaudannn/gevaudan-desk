@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>About — GEVAUDAN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #080808; font-family: 'Inter', sans-serif; color: #777; line-height: 1.5; -webkit-font-smoothing: antialiased; letter-spacing: 0.02em; min-height: 100vh; display: flex; flex-direction: column; }
+    a { text-decoration: none; color: inherit; }
+    .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 0 2.5rem; }
+    .announcement-bar { background: #0d0d0d; text-align: center; padding: 0.5rem; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.2em; color: #555; border-bottom: 1px solid #141414; display: none; }
+    .announcement-bar.show { display: block; }
+    .site-header { display: flex; justify-content: center; align-items: center; padding: 1.4rem 2.5rem; background: #080808; border-bottom: 1px solid #141414; position: sticky; top: 0; z-index: 100; }
+    .header-left { position: absolute; left: 2.5rem; display: flex; gap: 2rem; }
+    .header-right { position: absolute; right: 2.5rem; display: flex; align-items: center; gap: 1.5rem; }
+    .brand { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; letter-spacing: 0.3em; color: #888; text-transform: uppercase; }
+    .nav-link { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em; color: #666; font-weight: 400; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: #999; }
+    .locale-selectors { display: flex; gap: 1.2rem; align-items: center; }
+    .custom-select { position: relative; display: inline-block; }
+    .select-button { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: #666; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; padding: 0.3rem 0; transition: color 0.3s; display: flex; align-items: center; gap: 0.3rem; }
+    .select-button:hover { color: #999; }
+    .select-arrow { font-size: 0.5rem; transition: transform 0.3s; }
+    .select-button.active .select-arrow { transform: rotate(180deg); }
+    .select-dropdown { position: absolute; top: 100%; right: 0; background: #0d0d0d; border: 1px solid #1a1a1a; min-width: 80px; z-index: 200; opacity: 0; visibility: hidden; transition: all 0.2s ease; padding: 0.4rem 0; }
+    .select-dropdown.show { opacity: 1; visibility: visible; }
+    .select-option { display: block; width: 100%; padding: 0.5rem 1rem; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: #777; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; text-align: left; transition: all 0.2s; }
+    .select-option:hover { background: #141414; color: #aaa; }
+    .select-option.selected { color: #999; }
+    .locale-divider { width: 1px; height: 12px; background: #1a1a1a; }
+    .cart-link { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em; color: #777; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.3s; }
+    .cart-link:hover { color: #aaa; }
+    .about-section { flex: 1; padding: 5rem 0; }
+    .about-header { margin-bottom: 4rem; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 500; color: #888; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .page-subtitle { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.3em; color: #555; }
+    .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .about-text p { font-size: 0.85rem; color: #666; line-height: 1.8; margin-bottom: 1.5rem; letter-spacing: 0.03em; }
+    .about-text .highlight { color: #888; font-weight: 400; }
+    .about-divider { width: 30px; height: 1px; background: #333; margin: 2rem 0; }
+    .about-image { width: 100%; aspect-ratio: 3/4; background: #0a0a0a; position: relative; overflow: hidden; }
+    .about-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) brightness(0.6) contrast(1.2); }
+    .about-details { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 5rem; padding-top: 3rem; border-top: 1px solid #141414; }
+    .detail-block h4 { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.25em; color: #666; margin-bottom: 0.8rem; font-weight: 500; }
+    .detail-block p { font-size: 0.7rem; color: #555; line-height: 1.7; letter-spacing: 0.03em; }
+    .footer { padding: 3rem 2.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.65rem; color: #444; border-top: 1px solid #141414; }
+    .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1rem; letter-spacing: 0.25em; color: #666; }
+    .footer-links { display: flex; gap: 2rem; } .footer-links a { color: #555; transition: color 0.3s; } .footer-links a:hover { color: #888; }
+    @media (max-width: 768px) { .about-content { grid-template-columns: 1fr; gap: 2.5rem; } .about-image { aspect-ratio: 4/3; order: -1; } .about-details { grid-template-columns: 1fr; } .header-left, .header-right { position: static; } .site-header { justify-content: space-between; } }
+    @media (max-width: 500px) { .container { padding: 0 1.2rem; } .site-header { padding: 1rem 1.2rem; } .header-left .nav-link { display: none; } .footer { flex-direction: column; gap: 1rem; text-align: center; } .page-title { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <div class="announcement-bar" id="announcementBar"></div>
+  <header class="site-header">
+    <div class="header-left"><a href="shop.html" class="nav-link">Shop</a><a href="about.html" class="nav-link active">About</a></div>
+    <a href="index.html" class="brand">GEVAUDAN</a>
+    <div class="header-right">
+      <a href="lookbook.html" class="nav-link">Lookbook</a>
+      <div class="locale-selectors">
+        <div class="custom-select" id="currencySelect">
+          <button class="select-button" id="currencyButton"><span id="currentCurrency">EUR</span><span class="select-arrow">▾</span></button>
+          <div class="select-dropdown" id="currencyDropdown">
+            <button class="select-option selected" data-value="EUR" data-symbol="€">EUR €</button>
+            <button class="select-option" data-value="USD" data-symbol="$">USD $</button>
+            <button class="select-option" data-value="GBP" data-symbol="£">GBP £</button>
+            <button class="select-option" data-value="JPY" data-symbol="¥">JPY ¥</button>
+          </div>
+        </div>
+        <div class="locale-divider"></div>
+        <div class="custom-select" id="languageSelect">
+          <button class="select-button" id="languageButton"><span id="currentLanguage">EN</span><span class="select-arrow">▾</span></button>
+          <div class="select-dropdown" id="languageDropdown">
+            <button class="select-option selected" data-value="EN">English</button>
+            <button class="select-option" data-value="DE">Deutsch</button>
+            <button class="select-option" data-value="FR">Français</button>
+            <button class="select-option" data-value="ES">Español</button>
+            <button class="select-option" data-value="IT">Italiano</button>
+            <button class="select-option" data-value="JP">日本語</button>
+          </div>
+        </div>
+      </div>
+      <a href="cart.html" class="cart-link">Cart (0)</a>
+    </div>
+  </header>
+  <main class="about-section">
+    <div class="container">
+      <div class="about-header"><h1 class="page-title">About</h1><p class="page-subtitle">Est. 2026</p></div>
+      <div class="about-content">
+        <div class="about-text">
+          <p><span class="highlight">GEVAUDAN</span> produces dark essentials in limited quantities. No logos. No seasonal collections. No trend cycles.</p>
+          <p>Each garment is cut with precision from heavyweight fabrics — Italian leather, Japanese selvedge denim, Scottish wool. Materials that age with intent.</p>
+          <div class="about-divider"></div>
+          <p>We work with small family-owned ateliers across Europe. Every piece is made in batches of 50 or fewer. Once it's gone, it's gone.</p>
+          <p>No advertising. No influencers. You found us or you didn't.</p>
+        </div>
+        <div class="about-image"><img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964&auto=format&fit=crop" alt="Atelier"></div>
+      </div>
+      <div class="about-details">
+        <div class="detail-block"><h4>Production</h4><p>Limited runs of 50 pieces max. Made in Portugal, Italy, and Scotland. No mass manufacturing.</p></div>
+        <div class="detail-block"><h4>Materials</h4><p>Italian vegetable-tanned leather. Japanese raw denim. Scottish-spun wool. Hardware from Germany.</p></div>
+        <div class="detail-block"><h4>Shipping</h4><p>Worldwide delivery. Free on orders over €300. Discreet packaging with no branding on the outside.</p></div>
+        <div class="detail-block"><h4>Contact</h4><p>info@gevaudan.com<br>Response within 24 hours.</p></div>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    <span class="footer-brand">GEVAUDAN</span>
+    <div class="footer-links"><a href="#">Instagram</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+    <span style="color:#444;">© 2026</span>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded',function(){
+      const a=document.getElementById('announcementBar'),b=localStorage.getItem('gevaudan_currency')||'EUR',c=localStorage.getItem('gevaudan_language')||'EN';
+      function d(e){a.textContent=e;a.classList.add('show');setTimeout(()=>a.classList.remove('show'),2000);}
+      function e(f,g,h,i,j){
+        const k=document.getElementById(f),l=document.getElementById(g),m=document.getElementById(h),n=document.getElementById(i);
+        l.addEventListener('click',function(o){o.stopPropagation();const p=m.classList.contains('show');document.querySelectorAll('.select-dropdown').forEach(q=>q.classList.remove('show'));document.querySelectorAll('.select-button').forEach(r=>r.classList.remove('active'));if(!p){m.classList.add('show');l.classList.add('active');}});
+        m.querySelectorAll('.select-option').forEach(o=>{o.addEventListener('click',function(p){p.stopPropagation();const q=this.dataset.value;if(j==='gevaudan_currency'){const r=this.dataset.symbol;n.textContent=q;d('Currency changed to '+q);}else{n.textContent=q;d('Language changed to '+this.textContent);}m.querySelectorAll('.select-option').forEach(s=>s.classList.remove('selected'));this.classList.add('selected');localStorage.setItem(j,q);m.classList.remove('show');l.classList.remove('active');});});
+      }
+      e('currencySelect','currencyButton','currencyDropdown','currentCurrency','gevaudan_currency');
+      e('languageSelect','languageButton','languageDropdown','currentLanguage','gevaudan_language');
+      document.addEventListener('click',function(){document.querySelectorAll('.select-dropdown').forEach(h=>h.classList.remove('show'));document.querySelectorAll('.select-button').forEach(i=>i.classList.remove('active'));});
+      document.getElementById('currentCurrency').textContent=b;document.getElementById('currentLanguage').textContent=c;
+      document.querySelectorAll('#currencyDropdown .select-option').forEach(h=>{h.classList.remove('selected');if(h.dataset.value===b)h.classList.add('selected');});
+      document.querySelectorAll('#languageDropdown .select-option').forEach(h=>{h.classList.remove('selected');if(h.dataset.value===c)h.classList.add('selected');});
+    });
+  </script>
+</body>
+</html>

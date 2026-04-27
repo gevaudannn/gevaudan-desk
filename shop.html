@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Shop — GEVAUDAN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #080808; font-family: 'Inter', sans-serif; color: #777; line-height: 1.4; -webkit-font-smoothing: antialiased; letter-spacing: 0.02em; min-height: 100vh; display: flex; flex-direction: column; }
+    a { text-decoration: none; color: inherit; }
+    .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+    .announcement-bar { background: #0d0d0d; text-align: center; padding: 0.5rem; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.2em; color: #555; border-bottom: 1px solid #141414; display: none; }
+    .announcement-bar.show { display: block; }
+    .site-header { display: flex; justify-content: center; align-items: center; padding: 1.4rem 2.5rem; background: #080808; border-bottom: 1px solid #141414; position: sticky; top: 0; z-index: 100; }
+    .header-left { position: absolute; left: 2.5rem; display: flex; gap: 2rem; }
+    .header-right { position: absolute; right: 2.5rem; display: flex; align-items: center; gap: 1.5rem; }
+    .brand { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; letter-spacing: 0.3em; color: #888; text-transform: uppercase; }
+    .nav-link { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em; color: #666; font-weight: 400; transition: color 0.3s; }
+    .nav-link:hover, .nav-link.active { color: #999; }
+    .locale-selectors { display: flex; gap: 1.2rem; align-items: center; }
+    .custom-select { position: relative; display: inline-block; }
+    .select-button { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: #666; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; padding: 0.3rem 0; transition: color 0.3s; display: flex; align-items: center; gap: 0.3rem; }
+    .select-button:hover { color: #999; }
+    .select-arrow { font-size: 0.5rem; transition: transform 0.3s; }
+    .select-button.active .select-arrow { transform: rotate(180deg); }
+    .select-dropdown { position: absolute; top: 100%; right: 0; background: #0d0d0d; border: 1px solid #1a1a1a; min-width: 80px; z-index: 200; opacity: 0; visibility: hidden; transition: all 0.2s ease; padding: 0.4rem 0; }
+    .select-dropdown.show { opacity: 1; visibility: visible; }
+    .select-option { display: block; width: 100%; padding: 0.5rem 1rem; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: #777; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; text-align: left; transition: all 0.2s; }
+    .select-option:hover { background: #141414; color: #aaa; }
+    .select-option.selected { color: #999; }
+    .locale-divider { width: 1px; height: 12px; background: #1a1a1a; }
+    .cart-link { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em; color: #777; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.3s; }
+    .cart-link:hover { color: #aaa; }
+    .shop-section { flex: 1; padding: 4rem 0; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: #888; letter-spacing: 0.08em; margin-bottom: 2rem; }
+    .category-filters { display: flex; gap: 1.5rem; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #141414; }
+    .filter-link { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: #555; transition: color 0.3s; cursor: pointer; background: none; border: none; font-family: 'Inter', sans-serif; }
+    .filter-link:hover, .filter-link.active { color: #999; }
+    .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: #141414; }
+    .product-card { background: #0c0c0c; transition: background 0.3s; cursor: pointer; }
+    .product-card:hover { background: #111; }
+    .product-img { aspect-ratio: 3/4; overflow: hidden; background: #0a0a0a; }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6) contrast(1.1); transition: all 0.4s; }
+    .product-card:hover .product-img img { filter: brightness(0.8); transform: scale(1.03); }
+    .product-info { padding: 1rem; }
+    .product-name { font-size: 0.75rem; color: #999; margin-bottom: 0.3rem; }
+    .product-price { font-size: 0.65rem; color: #555; }
+    .footer { padding: 3rem 2.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.65rem; color: #444; border-top: 1px solid #141414; }
+    .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1rem; letter-spacing: 0.25em; color: #666; }
+    .footer-links { display: flex; gap: 2rem; } .footer-links a { color: #555; transition: color 0.3s; } .footer-links a:hover { color: #888; }
+    @media (max-width: 900px) { .product-grid { grid-template-columns: repeat(2, 1fr); } .header-left, .header-right { position: static; } .site-header { justify-content: space-between; } }
+    @media (max-width: 500px) { .container { padding: 0 1rem; } .site-header { padding: 1rem 1.2rem; } .header-left .nav-link { display: none; } .footer { flex-direction: column; gap: 1rem; text-align: center; } }
+  </style>
+</head>
+<body>
+  <div class="announcement-bar" id="announcementBar"></div>
+  <header class="site-header">
+    <div class="header-left"><a href="shop.html" class="nav-link active">Shop</a><a href="about.html" class="nav-link">About</a></div>
+    <a href="index.html" class="brand">GEVAUDAN</a>
+    <div class="header-right">
+      <a href="lookbook.html" class="nav-link">Lookbook</a>
+      <div class="locale-selectors">
+        <div class="custom-select" id="currencySelect">
+          <button class="select-button" id="currencyButton"><span id="currentCurrency">EUR</span><span class="select-arrow">▾</span></button>
+          <div class="select-dropdown" id="currencyDropdown">
+            <button class="select-option selected" data-value="EUR" data-symbol="€">EUR €</button>
+            <button class="select-option" data-value="USD" data-symbol="$">USD $</button>
+            <button class="select-option" data-value="GBP" data-symbol="£">GBP £</button>
+            <button class="select-option" data-value="JPY" data-symbol="¥">JPY ¥</button>
+          </div>
+        </div>
+        <div class="locale-divider"></div>
+        <div class="custom-select" id="languageSelect">
+          <button class="select-button" id="languageButton"><span id="currentLanguage">EN</span><span class="select-arrow">▾</span></button>
+          <div class="select-dropdown" id="languageDropdown">
+            <button class="select-option selected" data-value="EN">English</button>
+            <button class="select-option" data-value="DE">Deutsch</button>
+            <button class="select-option" data-value="FR">Français</button>
+            <button class="select-option" data-value="ES">Español</button>
+            <button class="select-option" data-value="IT">Italiano</button>
+            <button class="select-option" data-value="JP">日本語</button>
+          </div>
+        </div>
+      </div>
+      <a href="cart.html" class="cart-link">Cart (0)</a>
+    </div>
+  </header>
+  <main class="shop-section">
+    <div class="container">
+      <h1 class="page-title">Shop All</h1>
+      <div class="category-filters">
+        <button class="filter-link active">All</button>
+        <button class="filter-link">Jackets</button>
+        <button class="filter-link">Boots</button>
+        <button class="filter-link">Jeans</button>
+      </div>
+      <div class="product-grid">
+        <a href="product.html" class="product-card"><div class="product-img"><img src="https://www.veyroze.com/cdn/shop/collections/IMG_0580.jpg?v=1766711223&width=535" alt="Leather Jacket"></div><div class="product-info"><p class="product-name">Leather Jacket</p><p class="product-price" data-price="890">€890</p></div></a>
+        <a href="product.html" class="product-card"><div class="product-img"><img src="https://www.veyroze.com/cdn/shop/collections/IMG_0580.jpg?v=1766711223&width=535" alt="Wool Coat"></div><div class="product-info"><p class="product-name">Wool Overcoat</p><p class="product-price" data-price="720">€720</p></div></a>
+        <a href="product.html" class="product-card"><div class="product-img"><img src="https://www.veyroze.com/cdn/shop/collections/IMG_0584.jpg?v=1766711390&width=535" alt="Chelsea Boot"></div><div class="product-info"><p class="product-name">Chelsea Boot</p><p class="product-price" data-price="480">€480</p></div></a>
+        <a href="product.html" class="product-card"><div class="product-img"><img src="https://www.veyroze.com/cdn/shop/collections/IMG_0528.jpg?v=1766711074&width=535" alt="Raw Denim"></div><div class="product-info"><p class="product-name">Raw Denim</p><p class="product-price" data-price="280">€280</p></div></a>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    <span class="footer-brand">GEVAUDAN</span>
+    <div class="footer-links"><a href="#">Instagram</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+    <span style="color:#444;">© 2026</span>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded',function(){
+      const a=document.getElementById('announcementBar'),b=localStorage.getItem('gevaudan_currency')||'EUR',c=localStorage.getItem('gevaudan_language')||'EN';
+      function d(e){a.textContent=e;a.classList.add('show');setTimeout(()=>a.classList.remove('show'),2000);}
+      function e(f,g,h,i,j){
+        const k=document.getElementById(f),l=document.getElementById(g),m=document.getElementById(h),n=document.getElementById(i);
+        l.addEventListener('click',function(o){o.stopPropagation();const p=m.classList.contains('show');document.querySelectorAll('.select-dropdown').forEach(q=>q.classList.remove('show'));document.querySelectorAll('.select-button').forEach(r=>r.classList.remove('active'));if(!p){m.classList.add('show');l.classList.add('active');}});
+        m.querySelectorAll('.select-option').forEach(o=>{o.addEventListener('click',function(p){p.stopPropagation();const q=this.dataset.value;if(j==='gevaudan_currency'){const r=this.dataset.symbol;n.textContent=q;updatePricesAll(q,r);d('Currency changed to '+q);}else{n.textContent=q;d('Language changed to '+this.textContent);}m.querySelectorAll('.select-option').forEach(s=>s.classList.remove('selected'));this.classList.add('selected');localStorage.setItem(j,q);m.classList.remove('show');l.classList.remove('active');});});
+      }
+      e('currencySelect','currencyButton','currencyDropdown','currentCurrency','gevaudan_currency');
+      e('languageSelect','languageButton','languageDropdown','currentLanguage','gevaudan_language');
+      document.addEventListener('click',function(){document.querySelectorAll('.select-dropdown').forEach(h=>h.classList.remove('show'));document.querySelectorAll('.select-button').forEach(i=>i.classList.remove('active'));});
+      document.getElementById('currentCurrency').textContent=b;document.getElementById('currentLanguage').textContent=c;
+      document.querySelectorAll('#currencyDropdown .select-option').forEach(h=>{h.classList.remove('selected');if(h.dataset.value===b)h.classList.add('selected');});
+      document.querySelectorAll('#languageDropdown .select-option').forEach(h=>{h.classList.remove('selected');if(h.dataset.value===c)h.classList.add('selected');});
+      const f={EUR:1,USD:1.08,GBP:0.86,JPY:156.82};
+      function updatePricesAll(g,h){document.querySelectorAll('[data-price]').forEach(i=>{const j=parseFloat(i.dataset.price);i.textContent=h+Math.round(j*f[g]);});}
+    });
+  </script>
+</body>
+</html>
